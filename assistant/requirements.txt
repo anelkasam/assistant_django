@@ -1,0 +1,4 @@
+Django
+gevent
+gunicorn
+psycopg2
