@@ -26,8 +26,3 @@ class RegisterForm(forms.Form):
         if self.cleaned_data.get('password') != self.cleaned_data.get('password2'):
             self.add_error('password2', 'Please check the confirmation password.')
 
-
-class LoginForm(forms.Form):
-    username = forms.CharField(label='Username', max_length=20)
-    password = forms.CharField(widget=forms.PasswordInput(), label='Password')
-

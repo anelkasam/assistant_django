@@ -114,6 +114,8 @@ STATICFILES_DIRS = os.path.join(BASE_DIR, "static")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+LOGIN_REDIRECT_URL = '/'
+
 try:
     from . dev_settings import *
 except ImportError:

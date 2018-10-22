@@ -1,10 +1,8 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import PasswordResetForm
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm
 
 
 def register(request):
@@ -28,31 +26,3 @@ def register(request):
         form = RegisterForm()
 
     return render(request, 'register.html', {'form': form})
-
-
-def login_user(request):
-    """
-    Login user by username and password
-    """
-    if request.user.is_authenticated:
-        return redirect('index')
-
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            user = authenticate(request, username=form.cleaned_data.get('username'),
-                                password=form.cleaned_data.get('password'))
-            if user:
-                login(request, user)
-                return redirect('index')
-            form.add_error(None, 'Invalid login or password')
-    else:
-        form = LoginForm()
-
-    return render(request, 'login.html', {'form': form})
-
-
-@login_required
-def logout_user(request):
-    logout(request)
-    return redirect('index')
