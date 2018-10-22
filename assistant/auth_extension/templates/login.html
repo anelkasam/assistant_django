@@ -9,7 +9,7 @@
             <form action="{% url 'login' %}" method="post">
                 {% csrf_token %}
                 {% for error in form.errors.values %}
-                    <div class="alert alert-danger">
+                    <div class="alert-warning">
                         <strong>{{ error|escape }}</strong>
                     </div>
                     {% endfor %}
@@ -37,7 +37,7 @@
             </form>
             <div class="text-center">
                 <a class="d-block small mt-3" href="{% url 'register' %}">Register an Account</a>
-                <a class="d-block small" href="#">Forgot Password?</a>
+                <a class="d-block small" href="{% url 'password_reset' %}">Forgot Password?</a>
             </div>
         </div>
     </div>

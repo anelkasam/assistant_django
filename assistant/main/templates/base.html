@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,16 +14,16 @@
     <title>Assistant</title>
 
     <!-- Bootstrap core CSS-->
-    <link href="../../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- Custom fonts for this template-->
-    <link href="../../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
 
     <!-- Page level plugin CSS-->
-    <link href="../../static/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+    <link href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}" rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="../../static/css/sb-admin.css" rel="stylesheet">
+    <link href="{% static 'css/sb-admin.css' %}" rel="stylesheet">
 
 </head>
 
@@ -117,7 +119,7 @@
                 <h6 class="dropdown-header">Login Screens:</h6>
                 <a class="dropdown-item" href="../../auth_extension/templates/login.html">Login</a>
                 <a class="dropdown-item" href="../../auth_extension/templates/register.html">Register</a>
-                <a class="dropdown-item" href="../../auth_extension/templates/forgot-password.html">Forgot Password</a>
+                <a class="dropdown-item" href="../../auth_extension/templates/reset_password.html">Forgot Password</a>
                 <div class="dropdown-divider"></div>
                 <h6 class="dropdown-header">Other Pages:</h6>
                 <a class="dropdown-item" href="404.html">404 Page</a>
@@ -180,14 +182,14 @@
 </div>
 
 <!-- Bootstrap core JavaScript-->
-<script src="../../static/vendor/jquery/jquery.min.js"></script>
-<script src="../../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
 <!-- Core plugin JavaScript-->
-<script src="../../static/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
 
 <!-- Custom scripts for all pages-->
-<script src="../../static/js/sb-admin.min.js"></script>
+<script src="{% static 'js/sb-admin.min.js' %}"></script>
 
 </body>
 
