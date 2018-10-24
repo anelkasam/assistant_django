@@ -2,6 +2,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 
 from .forms import RegisterForm, EditUserForm, ProfileForm, CreateFamilyForm
 
@@ -77,3 +78,20 @@ def leave_family(request):
         profile.save()
 
     return redirect('profile_page')
+
+
+@login_required
+def create_token(request):
+    """
+    Create token for connection to the family
+    """
+    profile = request.user.profile
+    if not (profile.family and profile.is_admin):
+        return redirect('profile_page')
+
+    return HttpResponse(profile.family.generate_token())
+
+
+@login_required
+def connect_to_family(request):
+    pass

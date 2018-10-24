@@ -24,7 +24,13 @@
                 <h3>Actions with Family:</h3>
                 {% if user.profile.family %}
                     <p>You are belong to the {{ user.profile.family }}</p>
-                    <a class="btn btn-primary btn-block" href="{% url 'leave_family' %}">Leave Family</a>
+                    {% if user.profile.is_admin %}
+                        <p>To invite other user to the Family generate token and give it to user</p>
+                        <a class="btn btn-primary btn-block" id="generate_token">Generate Token</a>
+                        <span id="token"></span>
+                    {% else %}
+                        <a class="btn btn-primary btn-block" href="{% url 'leave_family' %}">Leave Family</a>
+                    {% endif %}
                 {% else %}
                     <a class="btn btn-primary btn-block" href="{% url 'create_family' %}">Create Family</a>
                 {% endif %}

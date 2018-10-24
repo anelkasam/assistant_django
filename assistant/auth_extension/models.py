@@ -1,7 +1,12 @@
+import jwt
+from time import time
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
+from assistant.settings import SECRET_KEY
 
 
 class Family(models.Model):
@@ -10,6 +15,20 @@ class Family(models.Model):
     In the budget part off project all transactions connects by family.
     """
     last_name = models.CharField(max_length=30, verbose_name='Last name')
+
+    def generate_token(self):
+        exp = time() + 600
+        return jwt.encode(
+            {'reset_password': self.id + exp, 'exp': exp}, SECRET_KEY, algorithm='HS256').decode('utf-8')
+
+    @staticmethod
+    def verify_token(token):
+        try:
+            id = jwt.decode(token, SECRET_KEY,
+                            algorithms=['HS256'])['reset_password']
+        except:
+            return
+        return True
 
     def __str__(self):
         return f'Family {self.last_name}'
