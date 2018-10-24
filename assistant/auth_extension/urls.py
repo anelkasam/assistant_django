@@ -23,5 +23,6 @@ urlpatterns = [
     path('user_profile/', views.profile_page, name='profile_page'),
     path('create_family/', views.create_family, name='create_family'),
     path('leave_family/', views.leave_family, name='leave_family'),
-    path('create_token/', views.create_token, name='create_token')
+    path('create_token/', views.create_token, name='create_token'),
+    path('connect_to_family/', views.connect_to_family, name='connect_to_family')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

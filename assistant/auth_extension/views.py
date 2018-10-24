@@ -1,10 +1,12 @@
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed
 
-from .forms import RegisterForm, EditUserForm, ProfileForm, CreateFamilyForm
+from .forms import RegisterForm, EditUserForm, ProfileForm, CreateFamilyForm, TokenForm
+from .models import Family
 
 
 def register(request):
@@ -35,10 +37,11 @@ def profile_page(request):
     """"""
     if request.method == 'POST':
         user_form = EditUserForm(request.POST, instance=request.user)
-        profile_form = ProfileForm(request.POST, instance=request.user.profile)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            return redirect('profile_page')
     else:
         user_form = EditUserForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)
@@ -94,4 +97,19 @@ def create_token(request):
 
 @login_required
 def connect_to_family(request):
-    pass
+    if request.method != 'POST':
+        return HttpResponseNotAllowed('POST')
+
+    token = request.POST.get('token')
+    if not token:
+        # ToDo: Return the error message also!!!
+        return redirect('profile_page')
+
+    family = Family.verify_token(token)
+    if not family:
+        # ToDo: Return the error message also!!!
+        return redirect('profile_page')
+
+    request.user.profile.family = family
+    request.user.profile.save()
+    return redirect('profile_page')

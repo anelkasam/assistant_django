@@ -17,18 +17,17 @@ class Family(models.Model):
     last_name = models.CharField(max_length=30, verbose_name='Last name')
 
     def generate_token(self):
-        exp = time() + 600
-        return jwt.encode(
-            {'reset_password': self.id + exp, 'exp': exp}, SECRET_KEY, algorithm='HS256').decode('utf-8')
+        exp = time() + 3600
+        return jwt.encode({'family_id': self.id, 'exp': exp},
+                          SECRET_KEY, algorithm='HS256').decode('utf-8')
 
     @staticmethod
     def verify_token(token):
         try:
-            id = jwt.decode(token, SECRET_KEY,
-                            algorithms=['HS256'])['reset_password']
+            id = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])['family_id']
+            return Family.objects.get(pk=id)
         except:
-            return
-        return True
+            pass
 
     def __str__(self):
         return f'Family {self.last_name}'

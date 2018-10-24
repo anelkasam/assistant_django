@@ -51,3 +51,7 @@ class CreateFamilyForm(forms.ModelForm):
     class Meta:
         model = Family
         fields = ('last_name',)
+
+
+class TokenForm(forms.Form):
+    token = forms.CharField(label='Token')
