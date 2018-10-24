@@ -21,5 +21,6 @@ urlpatterns = [
                                              success_url='/', post_reset_login=True),
             name='password_reset_confirm'),
     path('user_profile/', views.profile_page, name='profile_page'),
-    path('create_family/', views.create_family, name='create_family')
+    path('create_family/', views.create_family, name='create_family'),
+    path('leave_family/', views.leave_family, name='leave_family')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -24,7 +24,7 @@
                 <h3>Actions with Family:</h3>
                 {% if user.profile.family %}
                     <p>You are belong to the {{ user.profile.family }}</p>
-                    <a class="btn btn-primary btn-block" href="#">Leave Family</a>
+                    <a class="btn btn-primary btn-block" href="{% url 'leave_family' %}">Leave Family</a>
                 {% else %}
                     <a class="btn btn-primary btn-block" href="{% url 'create_family' %}">Create Family</a>
                 {% endif %}

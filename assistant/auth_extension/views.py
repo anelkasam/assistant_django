@@ -60,3 +60,20 @@ def create_family(request):
         form = CreateFamilyForm()
 
     return render(request, 'create_family.html', {'form': form})
+
+
+@login_required
+def leave_family(request):
+    """
+    If user belong to some family and not an admin -> set family None
+    If user is admin -> do nothing for now
+    """
+    profile = request.user.profile
+    if not profile.family:
+        return redirect('index')
+
+    if not profile.is_admin:
+        profile.family = None
+        profile.save()
+
+    return redirect('profile_page')
