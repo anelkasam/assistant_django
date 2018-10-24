@@ -18,12 +18,19 @@ class Family(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     family = models.ForeignKey(Family, on_delete=models.SET_NULL, blank=True, null=True)
-
-    @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
-        if created:
-            Profile.objects.create(user=instance)
+    is_admin = models.BooleanField(default=False)
+    photo = models.ImageField(upload_to='profile_photos', blank=True, null=True, verbose_name='Profile photo')
 
     def __str__(self):
         return f'User {self.user.username}'
 
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()

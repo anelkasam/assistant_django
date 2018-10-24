@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <table class="table table-hover">
+        <tr>
+            <td width="256px"><img src="{{ user.profile.photo.url }}" style="height: 200px;width: auto"></td>
+            <td>
+                <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+                <p><b>Email address</b>: {{ user.email }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h3>Edit your pesonal information:</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ user_form.as_p }}
+                    {{ profile_form.as_p }}
+                    <button type="submit">Save changes</button>
+                </form>
+            </td>
+            <td>
+                <h3>Actions with Family:</h3>
+                {% if user.profile.family %}
+                    <p>You are belong to the {{ user.profile.family }}</p>
+                    <a class="btn btn-primary btn-block" href="#">Leave Family</a>
+                {% else %}
+                    <a class="btn btn-primary btn-block" href="{% url 'create_family' %}">Create Family</a>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

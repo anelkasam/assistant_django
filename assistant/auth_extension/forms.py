@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from .models import Profile, Family
 
 
 class RegisterForm(forms.Form):
@@ -26,3 +27,27 @@ class RegisterForm(forms.Form):
         if self.cleaned_data.get('password') != self.cleaned_data.get('password2'):
             self.add_error('password2', 'Please check the confirmation password.')
 
+
+class EditUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('photo',)
+
+
+class CreateFamilyForm(forms.ModelForm):
+    def save(self, profile, commit=True):
+        family = super(CreateFamilyForm, self).save()
+        profile.family = family
+        profile.is_admin = True
+        profile.save()
+        return family
+
+    class Meta:
+        model = Family
+        fields = ('last_name',)
