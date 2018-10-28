@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container">
+    <div class="card card-login mx-auto mt-5">
+        <div class="card-header">Create Family</div>
+        <div class="card-body">
+            <form action="{% url 'create_family' %}" method="post">
+                {% csrf_token %}
+                {% for error in form.errors.values %}
+                <div class="alert-warning">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+                {% endfor %}
+                <div class="form-group">
+                    <div class="form-label-group">
+                        {{ form.last_name|add_class:'form-control' }}
+                        <label for="{{ form.last_name.id_for_label }}">Last name</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Create</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

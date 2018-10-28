@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <table class="table table-hover">
+        <tr>
+            {% if user.profile.photo %}
+            <td width="256px"><img src="{{ user.profile.photo.url }}" style="height: 200px;width: auto"></td>
+            {% endif %}
+            <td>
+                <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+                <p><b>Email address</b>: {{ user.email }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h3>Edit your pesonal information:</h3>
+                <form action="{% url 'profile_page' %}" method="post" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {{ user_form.as_p }}
+                    {{ profile_form.as_p }}
+                    <button type="submit" class="btn btn-primary btn-block">Save changes</button>
+                </form>
+            </td>
+            <td>
+                <h3>Actions with Family:</h3>
+                {% if user.profile.family %}
+                <p>You are belong to the {{ user.profile.family }}</p>
+                {% if user.profile.is_admin %}
+                <p>To invite other user to the Family generate token and give it to user</p>
+                <a class="btn btn-primary btn-block" id="generate_token">Generate Token</a>
+                <span id="token"></span>
+                {% else %}
+                <a class="btn btn-primary btn-block" href="{% url 'leave_family' %}">Leave Family</a>
+                {% endif %}
+                {% else %}
+                <p>You can create your own Family</p>
+                <a class="btn btn-primary btn-block" href="{% url 'create_family' %}">Create Family</a>
+                <br>
+                <p>Or you can connect to the existing Family using token from admin:</p>
+                <form action="{% url 'connect_to_family' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div class="form-label-group">
+                            <input type="text" class="form-control" name="token">
+                            <label>Connection token</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Connect</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

@@ -19,8 +19,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '!c7pu9ym3w094pj$^xhm4afcj5o@q!0hu9!sr@5hh_we@h(qqo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,9 +35,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'coverage',
+    'widget_tweaks',
     'auth_extension',
     'budget',
-    'main'
+    'main',
+    'todo'
 ]
 
 MIDDLEWARE = [
@@ -71,22 +72,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'assistant.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DATABASE_NAME', 'assistant'),
-        'USER': os.environ.get('DATABASE_USER', 'elena'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', '3414269'),
-        'HOST': 'postgres',
-        'PORT': os.environ.get('DATABASE_PORT', 5432)
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -129,3 +114,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/auth/login/'
+
+try:
+    from . dev_settings import *
+except ImportError:
+    pass
+

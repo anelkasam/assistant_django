@@ -1,4 +1,8 @@
 Django
+django-widget-tweaks
 gevent
 gunicorn
-psycopg2
+psycopg2-binary
+Pillow
+pyjwt
+coverage

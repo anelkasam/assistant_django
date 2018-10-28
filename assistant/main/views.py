@@ -1,6 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 
 
 def index(request):
-    return render(request, 'index.html')
+    context = {}
+    if request.user.is_authenticated:
+        context = {}
+    return render(request, 'index.html', context)
