@@ -20,8 +20,10 @@ class RegisterForm(forms.Form):
         Check if password equals to password2
         """
         cleaned_data = super().clean()
-        email = cleaned_data.get('email')
-        if User.objects.filter(email=email):
+        if User.objects.filter(username=cleaned_data.get('username')):
+            self.add_error('username', 'User with given username address is already registered.')
+
+        if User.objects.filter(email=cleaned_data.get('email')):
             self.add_error('email', 'User with given email address is already registered.')
 
         if self.cleaned_data.get('password') != self.cleaned_data.get('password2'):

@@ -1,7 +1,8 @@
-{% load staticfiles %}
-
 <!DOCTYPE html>
 <html lang="en">
+
+{% load staticfiles %}
+{% load main_extras %}
 
 <head>
 
@@ -139,7 +140,13 @@
     </ul>
 
     <div id="content-wrapper">
+        <div class="container-fluid">
+        {% for message in messages %}
+        {% get_bootstrap_alert_msg_css_name message.tags as alert_tag %}
+            <div class="alert alert-{{ alert_tag }}">{{ message }}</div>
+        {% endfor %}
         {% block content %} {% endblock %}
+        </div>
 
         <!-- Sticky Footer -->
         <footer class="sticky-footer">

@@ -35,10 +35,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'coverage',
     'widget_tweaks',
     'auth_extension',
     'budget',
-    'main'
+    'main',
+    'todo'
 ]
 
 MIDDLEWARE = [
@@ -114,6 +116,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/auth/login/'
 
 try:
     from . dev_settings import *
