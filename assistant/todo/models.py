@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from auth_extension.models import Profile
 
 
-DEFAULT_CATEGORY = 1
+DEFAULT_CATEGORY = 2
 
 
 class Category(models.Model):
@@ -17,7 +17,7 @@ class Category(models.Model):
         unique_together = (("title", "profile"),)
 
     def delete(self, *args, **kwargs):
-        if self.id != 1:
+        if self.id != DEFAULT_CATEGORY:
             super(Category, self).delete(*args, **kwargs)
         # ToDo: in other case send exception
 
