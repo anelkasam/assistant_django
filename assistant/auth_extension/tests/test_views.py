@@ -5,9 +5,11 @@ from ..models import Profile, Family
 
 
 class RegistrationTest(TestCase):
+    fixtures = ['user']
+
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create(username='Elena', email='anelka.s@mail.ru', password='password')
+        self.user = User.objects.get(id=1)
 
     def test_success_registration_get(self):
         response = self.client.get('/auth/register/')
@@ -33,7 +35,7 @@ class RegistrationTest(TestCase):
 
     def test_duplicate_username(self):
         response = self.client.post('/auth/register/', data={
-            'username': 'Elena',
+            'username': 'user1',
             'password': 'password',
             'password2': 'password',
             'email': 'example@test.com'
@@ -48,7 +50,7 @@ class RegistrationTest(TestCase):
             'username': 'anelka',
             'password': 'password',
             'password2': 'password',
-            'email': 'anelka.s@mail.ru'
+            'email': 'test1@gmail.com'
         }, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'User with given email address is already registered.')
@@ -94,9 +96,11 @@ class RegistrationTest(TestCase):
 
 
 class ProfilePageTest(TestCase):
+    fixtures = ['user']
+
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create(username='Elena', email='anelka.s@mail.ru', password='password')
+        self.user = User.objects.get(id=1)
         self.client.force_login(self.user)
 
     def test_success_get(self):

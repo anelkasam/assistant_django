@@ -1,0 +1,18 @@
+[
+  {
+    "model": "todo.category",
+    "pk": 1,
+    "fields": {
+      "title": "Other",
+      "user": null
+    }
+  },
+  {
+    "model": "todo.category",
+    "pk": 2,
+    "fields": {
+      "title": "Housework",
+      "user": 1
+    }
+  }
+]
