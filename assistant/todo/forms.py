@@ -17,7 +17,8 @@ class DateInput(forms.DateInput):
 
 
 class TaskForm(forms.ModelForm):
-    deadline = forms.DateTimeField(initial=datetime.now().strftime("%d-%m-%Y"), required=False, widget=DateInput())
+    deadline = forms.DateTimeField(initial=datetime.now().strftime("%d-%m-%Y"),
+                                   required=False, widget=DateInput())
 
     class Meta:
         model = Task

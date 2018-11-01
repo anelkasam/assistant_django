@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'coverage',
+    'crispy_forms',
     'widget_tweaks',
     'auth_extension',
     'budget',
@@ -117,6 +118,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/auth/login/'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 try:
     from . dev_settings import *

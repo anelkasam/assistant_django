@@ -6,3 +6,4 @@ psycopg2-binary
 Pillow
 pyjwt
 coverage
+django-crispy-forms
