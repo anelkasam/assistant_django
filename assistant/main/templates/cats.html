@@ -1,0 +1,11 @@
+<div class="dropdown-menu" aria-labelledby="pagesDropdown">
+    <a class="dropdown-item" href="{% url 'tasks' %}">All</a>
+    <div class="dropdown-divider"></div>
+    {% for cat in cats %}
+        <a class="dropdown-item" href="{% url 'tasks_by_category' category_id=cat.id %}">{{ cat.title }}</a>
+    {% endfor %}
+    <div class="dropdown-divider"></div>
+    {% for cat in default %}
+        <a class="dropdown-item" href="{% url 'tasks_by_category' category_id=cat.id %}">{{ cat.title }}</a>
+    {% endfor %}
+</div>

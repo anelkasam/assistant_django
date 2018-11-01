@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="fas fa-tasks"></i>
+            Your tasks
+            <a href="{% url 'add_task' %}" class="btn btn-dark float-sm-right">Add new task</a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Task</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Significance</th>
+                        <th>Deadline</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for task in tasks %}
+                        <tr>
+                            <td>{{ task.catrgory }}</td>
+                            <td>{{ task.title }}</td>
+                            <td>{{ task.description }}</td>
+                            <td>{{ task.status }}</td>
+                            <td>{{ task.significance }}</td>
+                            <td>{{ task.deadline }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer small text-muted"></div>
+    </div>
+{% endblock %}
