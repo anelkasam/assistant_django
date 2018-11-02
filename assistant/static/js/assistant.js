@@ -3,5 +3,3 @@ $('#generate_token').click(function () {
         $('#token').replaceWith("<p>" + data + "</p>");
     });
 });
-
-

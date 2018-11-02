@@ -14,21 +14,21 @@
                     <tr>
                         <th>Category</th>
                         <th>Task</th>
-                        <th>Description</th>
                         <th>Status</th>
                         <th>Significance</th>
                         <th>Deadline</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for task in tasks %}
                         <tr>
-                            <td>{{ task.catrgory }}</td>
+                            <td>{{ task.category }}</td>
                             <td>{{ task.title }}</td>
-                            <td>{{ task.description }}</td>
-                            <td>{{ task.status }}</td>
-                            <td>{{ task.significance }}</td>
-                            <td>{{ task.deadline }}</td>
+                            <td>{{ task.get_status_display }}</td>
+                            <td>{{ task.get_significance_display }}</td>
+                            <td>{{ task.deadline|date:'d-m-Y' }}</td>
+                            <td><a href="{% url 'edit_task' task_id=task.id %}">Edit</a></td>
                         </tr>
                     {% endfor %}
                     </tbody>

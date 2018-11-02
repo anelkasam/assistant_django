@@ -8,6 +8,9 @@ DEFAULT_CATEGORY = 1
 
 
 class Category(models.Model):
+    """
+    Category for the tasks
+    """
     title = models.CharField('Category title', max_length=40)
     user = models.ForeignKey(User, null=True, blank=True,
                              on_delete=models.CASCADE, verbose_name='Own to user')
@@ -25,6 +28,9 @@ class Category(models.Model):
 
 
 class Files(models.Model):
+    """
+    Files that can be connected to the Task or other models
+    """
     title = models.CharField('Title', max_length=50)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()

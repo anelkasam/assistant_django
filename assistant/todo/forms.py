@@ -13,7 +13,6 @@ class CreateCategoryForm(forms.ModelForm):
 
 class DateInput(forms.DateInput):
     input_type = 'date'
-    # attrs = {}
 
 
 class TaskForm(forms.ModelForm):
@@ -22,7 +21,7 @@ class TaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ['title', 'category', 'description', 'significance', 'deadline']
+        fields = ['title', 'category', 'description', 'significance', 'status', 'deadline']
 
     def __init__(self, user, *args, **kwargs):
         super(TaskForm, self).__init__(*args, **kwargs)
@@ -30,6 +29,9 @@ class TaskForm(forms.ModelForm):
 
 
 class FileForm(forms.ModelForm):
+    title = forms.CharField(required=False)
+    upload = forms.FileField(required=False)
+
     class Meta:
         model = Files
         fields = ['title', 'upload']
