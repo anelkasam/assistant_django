@@ -3,38 +3,103 @@
 {% block content %}
     <div class="card mb-3">
         <div class="card-header">
-            <i class="fas fa-tasks"></i>
-            Your tasks
-            <a href="{% url 'add_task' %}" class="btn btn-dark float-sm-right">Add new task</a>
+
+            <ul id="tabs" class="nav nav-tabs float-sm" role="tablist">
+                <i class="fas fa-tasks float-sm"></i>
+                <li class="btn">Your tasks</li>
+                <li role="presentation" class="btn active"><a href="#actual" role="tab" class="float-sm-right"
+                                                              data-toggle="tab">Actual</a></li>
+                <li role="presentation" class="btn"><a href="#closed" role="tab" class="float-sm-right"
+                                                       data-toggle="tab">Closed</a>
+                </li>
+                <a href="{% url 'add_task' %}?next={{ request.path|urlencode }}" class="btn float-sm-right">Add new
+                    task</a>
+            </ul>
+
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Task</th>
-                        <th>Status</th>
-                        <th>Significance</th>
-                        <th>Deadline</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for task in tasks %}
-                        <tr>
-                            <td>{{ task.category }}</td>
-                            <td>{{ task.title }}</td>
-                            <td>{{ task.get_status_display }}</td>
-                            <td>{{ task.get_significance_display }}</td>
-                            <td>{{ task.deadline|date:'d-m-Y' }}</td>
-                            <td><a href="{% url 'edit_task' task_id=task.id %}">Edit</a></td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active in" id="actual">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Category<a href="{% url 'tasks' %}?sort=-category"><i
+                                        class="fas fa-sort-down fa-fw"></i></a></th>
+                                <th>Task</th>
+                                <th>Status<a href="{% url 'tasks' %}?sort=status"><i class="fas fa-sort-down fa-fw"></i></a>
+                                </th>
+                                <th>Significance<a href="{% url 'tasks' %}?sort=significance"><i
+                                        class="fas fa-sort-down fa-fw"></i></a></th>
+                                <th>Deadline<a href="{% url 'tasks' %}?sort=deadline"><i
+                                        class="fas fa-sort-down fa-fw"></i></a>
+                                </th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for task in tasks %}
+                                <tr>
+                                    <td>{{ task.category }}</td>
+                                    <td>{{ task.title }}</td>
+                                    <td>{{ task.get_status_display }}</td>
+                                    <td>{{ task.get_significance_display }}</td>
+                                    <td>{{ task.deadline|date:'d-m-Y' }}</td>
+                                    <td>
+                                        <a href="{% url 'edit_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
+                                                class="fas fa-edit"></i></a>
+                                        <a href="{% url 'done_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
+                                                class="fas fa-check"></i></a>
+                                        <a href="{% url 'cancel_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
+                                                class="fas fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="closed">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Category<a href="{% url 'tasks' %}?sort=-category"><i
+                                        class="fas fa-sort-down fa-fw"></i></a></th>
+                                <th>Task</th>
+                                <th>Status<a href="{% url 'tasks' %}?sort=status"><i class="fas fa-sort-down fa-fw"></i></a>
+                                </th>
+                                <th>Significance<a href="{% url 'tasks' %}?sort=significance"><i
+                                        class="fas fa-sort-down fa-fw"></i></a></th>
+                                <th>Deadline<a href="{% url 'tasks' %}?sort=deadline"><i
+                                        class="fas fa-sort-down fa-fw"></i></a>
+                                </th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for task in finished_tasks %}
+                                <tr>
+                                    <td>{{ task.category }}</td>
+                                    <td>{{ task.title }}</td>
+                                    <td>{{ task.get_status_display }}</td>
+                                    <td>{{ task.get_significance_display }}</td>
+                                    <td>{{ task.deadline|date:'d-m-Y' }}</td>
+                                    <td>
+                                        <a href="{% url 'edit_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
+                                                class="fas fa-edit"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
+
         <div class="card-footer small text-muted"></div>
     </div>
 {% endblock %}

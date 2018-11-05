@@ -13,11 +13,24 @@ class TaskList(ListView):
     context_object_name = 'tasks'
 
     def get_queryset(self):
+        return Task.objects.filter(user=self.request.user)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(TaskList, self).get_context_data(*args, **kwargs)
+
+        tasks = context['tasks']
+
         category_id = self.kwargs.get('category_id')
         if category_id:
             category = get_object_or_404(Category, id=category_id)
-            return Task.objects.filter(user=self.request.user, category=category).order_by('status')
-        return Task.objects.filter(user=self.request.user).order_by('status')
+            tasks = tasks.filter(category=category)
+
+        sort_by = self.request.GET.get('sort', 'status')
+        tasks = tasks.order_by(sort_by)
+        context['tasks'] = tasks.filter(status__in=[Task.NEW, Task.PROGRESS, Task.POSTPONE])
+        context['finished_tasks'] = tasks.filter(status__in=[Task.DONE, Task.CANCELED])
+
+        return context
 
 
 @login_required
@@ -33,7 +46,7 @@ def create_task(request):
                 f = file_form.save(commit=False)
                 f.content_object = task
                 f.save()
-            return redirect('tasks')
+            return redirect(request.POST.get('next', 'tasks'))
     else:
         task_form = TaskForm(request.user, prefix='task')
         file_form = FileForm(prefix='file')
@@ -59,7 +72,7 @@ def edit_task(request, task_id):
         file_form = FileForm(request.POST, request.FILES, prefix='file')
         if task_form.is_valid():
             task_form.save()
-            return redirect('tasks')
+            return redirect(request.POST.get('next', 'tasks'))
     else:
         task_form = TaskForm(request.user, instance=task, prefix='task')
         file_form = FileForm(request.POST, request.FILES, prefix='file')
@@ -67,4 +80,20 @@ def edit_task(request, task_id):
     return render(request, 'edit_task.html', {'task_form': task_form,
                                               'file_form': file_form,
                                               'task': task})
+
+
+@login_required
+def done_task(request, task_id):
+    task = Task.objects.get(pk=task_id)
+    task.status = Task.DONE
+    task.save()
+    return redirect(request.GET.get('next', 'tasks'))
+
+
+@login_required
+def cancel_task(request, task_id):
+    task = Task.objects.get(pk=task_id)
+    task.status = Task.CANCELED
+    task.save()
+    return redirect(request.GET.get('next', 'tasks'))
 

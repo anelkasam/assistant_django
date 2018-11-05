@@ -12,6 +12,7 @@
             <div class="card-body">
                 <form action="{% url 'add_task' %}" method="post" enctype='multipart/form-data'>
                     {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.GET.next }}">
                     <div class="form-group">
                         {{ task_form.title|as_crispy_field }}
                     </div>
