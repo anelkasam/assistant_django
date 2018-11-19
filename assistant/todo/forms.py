@@ -3,6 +3,7 @@ from django import forms
 from django.db.models import Q
 
 from .models import Category, Task, Files
+from goals.models import Goal
 
 
 class CreateCategoryForm(forms.ModelForm):
@@ -21,11 +22,12 @@ class TaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ['title', 'category', 'description', 'significance', 'status', 'deadline']
+        fields = ['title', 'category', 'goal', 'description', 'significance', 'status', 'deadline']
 
     def __init__(self, user, *args, **kwargs):
         super(TaskForm, self).__init__(*args, **kwargs)
         self.fields['category'].queryset = Category.objects.filter(Q(user=user) | Q(user=None))
+        self.fields['goal'].queryset = Goal.objects.filter(user=user)
 
 
 class FileForm(forms.ModelForm):

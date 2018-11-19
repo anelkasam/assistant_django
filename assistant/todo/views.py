@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import CreateView, ListView
 
 from .forms import CreateCategoryForm, TaskForm, FileForm
-from .models import Category, Task, Goal
+from .models import Category, Task
 
 
 class TaskList(ListView):
@@ -79,6 +79,9 @@ def edit_task(request, task_id):
 
 
 def done_task(request, task_id):
+    """
+    Mark task as done
+    """
     task = Task.objects.get(pk=task_id)
     task.status = Task.DONE
     task.save()
@@ -86,6 +89,9 @@ def done_task(request, task_id):
 
 
 def cancel_task(request, task_id):
+    """
+    Cancel task by id
+    """
     task = Task.objects.get(pk=task_id)
     task.status = Task.CANCELED
     task.save()

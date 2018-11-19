@@ -30,6 +30,9 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        {{ task_form.goal|as_crispy_field }}
+                    </div>
+                    <div class="form-group">
                         {{ task_form.description|as_crispy_field }}
                     </div>
                     <div class="form-group">

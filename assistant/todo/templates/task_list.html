@@ -27,6 +27,7 @@
                                 <th>Category<a href="{% url 'tasks' %}?sort=-category"><i
                                         class="fas fa-sort-down fa-fw"></i></a></th>
                                 <th>Task</th>
+                                <th>Goal</th>
                                 <th>Status<a href="{% url 'tasks' %}?sort=status"><i class="fas fa-sort-down fa-fw"></i></a>
                                 </th>
                                 <th>Significance<a href="{% url 'tasks' %}?sort=significance"><i
@@ -42,6 +43,7 @@
                                 <tr>
                                     <td>{{ task.category }}</td>
                                     <td>{{ task.title }}</td>
+                                    <td>{{ task.goal.title }}</td>
                                     <td>{{ task.get_status_display }}</td>
                                     <td>{{ task.get_significance_display }}</td>
                                     <td>{{ task.deadline|date:'d-m-Y' }}</td>

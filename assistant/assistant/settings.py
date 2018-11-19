@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'auth_extension',
     'budget',
     'main',
-    'todo'
+    'todo',
+    'goals'
 ]
 
 MIDDLEWARE = [

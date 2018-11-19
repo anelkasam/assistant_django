@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+{% load static %}
 {% load staticfiles %}
 {% load main_extras %}
 
@@ -28,6 +29,8 @@
 
     <!-- Custom styles for this template-->
     <link href="{% static 'css/sb-admin.css' %}" rel="stylesheet">
+{#    <link href="{% static 'css/assistant.css' %}" rel="stylesheet">#}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/assistant.css' %}">
 
 </head>
 
@@ -103,12 +106,12 @@
 
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" href="index.html">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
+{#        <li class="nav-item">#}
+{#            <a class="nav-link" href="index.html">#}
+{#                <i class="fas fa-fw fa-tachometer-alt"></i>#}
+{#                <span>Dashboard</span>#}
+{#            </a>#}
+{#        </li>#}
         {% if user.is_authenticated %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown"
@@ -121,7 +124,7 @@
 
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="{% url 'main_goals' %}">
                     <i class="fas fa-fw fa-fighter-jet"></i>
                     <span>Goals</span></a>
             </li>
