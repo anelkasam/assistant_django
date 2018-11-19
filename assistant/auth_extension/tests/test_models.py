@@ -4,6 +4,8 @@ from ..models import Profile, Family
 
 
 class ProfileTest(TestCase):
+    fixtures = ['user']
+
     def setUp(self):
         self.user = User.objects.create(username='Elena', email='anelka.s@mail.ru', password='password')
 

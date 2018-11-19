@@ -1,0 +1,22 @@
+[
+  {
+    "model": "auth_extension.profile",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "family": null,
+      "is_admin": false,
+      "photo": null
+    }
+  },
+  {
+    "model": "auth_extension.profile",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "family": null,
+      "is_admin": false,
+      "photo": null
+    }
+  }
+]
