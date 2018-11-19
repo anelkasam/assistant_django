@@ -15,11 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth.decorators import login_required
+
+from decorator_include import decorator_include
 
 urlpatterns = [
     path('', include('main.urls')),
     path('auth/', include('auth_extension.urls')),
-    path('budget/', include('budget.urls')),
-    path('todo/', include('todo.urls')),
+    path('budget/', decorator_include(login_required, 'budget.urls')),
+    path('todo/', decorator_include(login_required, 'todo.urls')),
+    path('goals/', decorator_include(login_required, 'goals.urls')),
     path('admin/', admin.site.urls),
 ]

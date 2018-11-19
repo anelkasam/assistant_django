@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotAllowed, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import CreateView, ListView
@@ -33,7 +32,6 @@ class TaskList(ListView):
         return context
 
 
-@login_required
 def create_task(request):
     if request.method == 'POST':
         task_form = TaskForm(request.user, request.POST, prefix='task')
@@ -55,7 +53,6 @@ def create_task(request):
     return render(request, 'add_task.html', context)
 
 
-@login_required
 def create_category(request):
     if request.method == 'POST':
         category = Category.objects.create(title=request.POST['title'], user=request.user)
@@ -64,7 +61,6 @@ def create_category(request):
     return HttpResponseNotAllowed(['POST'])
 
 
-@login_required
 def edit_task(request, task_id):
     task = Task.objects.get(pk=task_id)
     if request.method == 'POST':
@@ -82,7 +78,6 @@ def edit_task(request, task_id):
                                               'task': task})
 
 
-@login_required
 def done_task(request, task_id):
     task = Task.objects.get(pk=task_id)
     task.status = Task.DONE
@@ -90,7 +85,6 @@ def done_task(request, task_id):
     return redirect(request.GET.get('next', 'tasks'))
 
 
-@login_required
 def cancel_task(request, task_id):
     task = Task.objects.get(pk=task_id)
     task.status = Task.CANCELED

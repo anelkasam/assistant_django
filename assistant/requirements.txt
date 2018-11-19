@@ -7,3 +7,4 @@ Pillow
 pyjwt
 coverage
 django-crispy-forms
+django-decorator-include

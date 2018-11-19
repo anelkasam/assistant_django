@@ -109,29 +109,33 @@
                 <span>Dashboard</span>
             </a>
         </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-fw fa-tasks"></i>
-                <span>Tasks</span>
-            </a>
-            {% get_user_categories user %}
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="charts.html">
-                <i class="fas fa-fw fa-fighter-jet"></i>
-                <span>Goals</span></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="tables.html">
-                <i class="fas fa-fw fa-sticky-note"></i>
-                <span>Notes</span></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="tables.html">
-                <i class="fas fa-fw fa-hand-holding-usd"></i>
-                <span>Budget</span></a>
-        </li>
+        {% if user.is_authenticated %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-fw fa-tasks"></i>
+                    <span>Tasks</span>
+                </a>
+
+                {% get_user_categories user %}
+
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="charts.html">
+                    <i class="fas fa-fw fa-fighter-jet"></i>
+                    <span>Goals</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="tables.html">
+                    <i class="fas fa-fw fa-sticky-note"></i>
+                    <span>Notes</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="tables.html">
+                    <i class="fas fa-fw fa-hand-holding-usd"></i>
+                    <span>Budget</span></a>
+            </li>
+        {% endif %}
     </ul>
 
     <div id="content-wrapper">
