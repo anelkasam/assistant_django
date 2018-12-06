@@ -3,3 +3,12 @@ $('#generate_token').click(function () {
         $('#token').replaceWith("<p>" + data + "</p>");
     });
 });
+
+function toggle(table_id) {
+    var x = document.getElementById(table_id);
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}

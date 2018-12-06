@@ -1,7 +1,7 @@
 from django.contrib import messages
-from django.http import HttpResponseNotAllowed, HttpResponse
+from django.http import HttpResponseNotAllowed
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import CreateView, ListView
+from django.views.generic import ListView
 
 from .forms import CreateCategoryForm, TaskForm, FileForm
 from .models import Category, Task
@@ -24,10 +24,19 @@ class TaskList(ListView):
             category = get_object_or_404(Category, id=category_id)
             tasks = tasks.filter(category=category)
 
-        sort_by = self.request.GET.get('sort', 'status')
+        sort_by = self.request.GET.get('sort', 'category')
         tasks = tasks.order_by(sort_by)
-        context['tasks'] = tasks.filter(status__in=[Task.NEW, Task.PROGRESS, Task.POSTPONE])
-        context['finished_tasks'] = tasks.filter(status__in=[Task.DONE, Task.CANCELED])
+        active_tasks = tasks.filter(status__in=[Task.NEW, Task.PROGRESS, Task.POSTPONE])
+        finished_tasks = tasks.filter(status__in=[Task.DONE, Task.CANCELED])
+        categories = {cat: [] for cat in set(t.category.title for t in active_tasks)}
+        for task in active_tasks:
+            categories[task.category.title].append(task)
+        context['active_tasks'] = categories
+
+        categories = {cat: [] for cat in set(t.category.title for t in finished_tasks)}
+        for task in finished_tasks:
+            categories[task.category.title].append(task)
+        context['finished_tasks'] = categories
 
         return context
 
@@ -96,4 +105,3 @@ def cancel_task(request, task_id):
     task.status = Task.CANCELED
     task.save()
     return redirect(request.GET.get('next', 'tasks'))
-

@@ -71,7 +71,7 @@
             </div>
         </div>
 
-        {% if today_tasks %}
+        {% if categories %}
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-tasks"></i>
@@ -80,41 +80,49 @@
                        class="btn btn-dark float-sm-right">Add new task</a>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Task</th>
-                                <th>Goal</th>
-                                <th>Status</th>
-                                <th>Significance</th>
-                                <th>Deadline</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for task in today_tasks %}
-                                <tr>
-                                    <td>{{ task.category }}</td>
-                                    <td>{{ task.title }}</td>
-                                    <td>{{ task.goal.title }}</td>
-                                    <td>{{ task.get_status_display }}</td>
-                                    <td>{{ task.get_significance_display }}</td>
-                                    <td>{{ task.deadline|date:'d-m-Y' }}</td>
-                                    <td>
-                                        <a href="{% url 'edit_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
-                                                class="fas fa-edit"></i></a>
-                                        <a href="{% url 'done_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
-                                                class="fas fa-check"></i></a>
-                                        <a href="{% url 'cancel_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
-                                                class="fas fa-trash"></i></a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                    {% for cat, tasks in categories.items %}
+                        <div class="col-xl-12 col-sm-6 mb-3">
+                            <div class="card o-hidden h-100">
+                                <a class="card-header clearfix small z-1" onclick="toggle('{{ cat }}')">
+                                    <span class="float-left">{{ cat }}</span>
+                                    <span class="float-right">{{ tasks|length }} tasks</span>
+                                </a>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="{{ cat }}" width="100%" cellspacing="0" style="display: none">
+                                        <thead>
+                                        <tr>
+                                            <th>Task</th>
+                                            <th>Goal</th>
+                                            <th>Status</th>
+                                            <th>Significance</th>
+                                            <th>Deadline</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for task in tasks %}
+                                            <tr>
+                                                <td>{{ task.title }}</td>
+                                                <td>{{ task.goal.title }}</td>
+                                                <td>{{ task.get_status_display }}</td>
+                                                <td>{{ task.get_significance_display }}</td>
+                                                <td>{{ task.deadline|date:'d-m-Y' }}</td>
+                                                <td>
+                                                    <a href="{% url 'edit_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
+                                                            class="fas fa-edit"></i></a>
+                                                    <a href="{% url 'done_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
+                                                            class="fas fa-check"></i></a>
+                                                    <a href="{% url 'cancel_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
+                                                            class="fas fa-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
                 <div class="card-footer small text-muted"></div>
             </div>
