@@ -5,7 +5,16 @@ from django.urls import reverse
 from django.views.generic import ListView
 
 from .forms import CreateCategoryForm, TaskForm, FileForm
-from .models import Category, Task
+from .models import Category, Task, DEFAULT_CATEGORY
+
+
+def pack_tasks_by_category(user, tasks):
+    cats = {cat.id: (cat, []) for cat in Category.objects.filter(user=user, parent=None)}
+    cats[DEFAULT_CATEGORY] = (Category.objects.get(pk=DEFAULT_CATEGORY), [])
+    for t in tasks:
+        cat = t.get_main_category()
+        cats[cat.id][1].append(t)
+    return cats.values()
 
 
 class TaskList(ListView):
@@ -18,31 +27,19 @@ class TaskList(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(TaskList, self).get_context_data(*args, **kwargs)
 
-        tasks = context['tasks']
         context['category_form'] = CreateCategoryForm(self.request.user, prefix='category')
-        context['categories'] = Category.objects.filter(user=self.request.user, parent=None)
 
+        tasks = context['tasks']
         category_id = self.kwargs.get('category_id')
         if category_id:
             category = get_object_or_404(Category, id=category_id)
             tasks = tasks.filter(category=category)
 
-        sort_by = self.request.GET.get('sort', 'category')
-        tasks = tasks.order_by(sort_by)
+        tasks = tasks.order_by(self.request.GET.get('sort', 'category'))
         active_tasks = tasks.filter(status__in=[Task.NEW, Task.PROGRESS, Task.POSTPONE])
         finished_tasks = tasks.filter(status__in=[Task.DONE, Task.CANCELED])
-
-        cats = {}
-        for t in active_tasks:
-            cat = t.get_main_category().title
-            cats[cat] = cats.get(cat, []) + [t]
-        context['active_tasks'] = cats
-
-        cats = {}
-        for t in finished_tasks:
-            cat = t.get_main_category().title
-            cats[cat] = cats.get(cat, []) + [t]
-        context['finished_tasks'] = cats
+        context['active_tasks'] = pack_tasks_by_category(self.request.user, active_tasks)
+        context['finished_tasks'] = pack_tasks_by_category(self.request.user, finished_tasks)
 
         return context
 
@@ -73,14 +70,15 @@ def create_task(request):
 
 
 def create_category(request):
+    """
+    Form is in modal window that is why this view calls only for POST method
+    """
     if request.method == 'POST':
         category_form = CreateCategoryForm(request.user, request.POST, prefix='category')
         if category_form.is_valid():
-            category = category_form.save(commit=False)
-            category.user = request.user
-            category.save()
+            category_form.save()
             messages.success(request, f'Category {category} was created.')
-        return HttpResponseRedirect(request.POST.get('next', '/'))
+        return redirect(reverse('tasks'))
     return HttpResponseNotAllowed(['POST'])
 
 
@@ -92,8 +90,11 @@ def edit_category(request, cat_id):
         if category_form.is_valid():
             category_form.save()
             messages.success(request, f'Category {category} was updated.')
-        return HttpResponseRedirect(request.POST.get('next', '/'))
-    return HttpResponseNotAllowed(['POST'])
+            return redirect(reverse('tasks'))
+    else:
+        category_form = CreateCategoryForm(request.user, instance=category, prefix='category')
+    return render(request, 'edit_category.html', {'category_form': category_form,
+                                                  'category': category})
 
 
 def edit_task(request, task_id):
