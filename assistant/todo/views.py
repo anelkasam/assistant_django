@@ -19,6 +19,8 @@ class TaskList(ListView):
         context = super(TaskList, self).get_context_data(*args, **kwargs)
 
         tasks = context['tasks']
+        context['category_form'] = CreateCategoryForm(self.request.user, prefix='category')
+        context['categories'] = Category.objects.filter(user=self.request.user, parent=None)
 
         category_id = self.kwargs.get('category_id')
         if category_id:
@@ -49,7 +51,6 @@ def create_task(request):
     """
     Create task view
     """
-    category_form = CreateCategoryForm(request.user, prefix='category')
     if request.method == 'POST':
         task_form = TaskForm(request.user, request.POST, prefix='task')
         file_form = FileForm(request.POST, request.FILES, prefix='file')
@@ -66,8 +67,7 @@ def create_task(request):
         task_form = TaskForm(request.user, prefix='task')
         file_form = FileForm(prefix='file')
 
-    context = {'category_form': category_form,
-               'task_form': task_form,
+    context = {'task_form': task_form,
                'file_form': file_form}
     return render(request, 'add_task.html', context)
 
@@ -86,7 +86,6 @@ def create_category(request):
 
 def edit_task(request, task_id):
     task = Task.objects.get(pk=task_id)
-    category_form = CreateCategoryForm(request.user, prefix='category')
     if request.method == 'POST':
         task_form = TaskForm(request.user, request.POST, instance=task, prefix='task')
         file_form = FileForm(request.POST, request.FILES, prefix='file')
@@ -99,7 +98,6 @@ def edit_task(request, task_id):
 
     return render(request, 'edit_task.html', {'task_form': task_form,
                                               'file_form': file_form,
-                                              'category_form': category_form,
                                               'task': task})
 
 

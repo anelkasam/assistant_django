@@ -1,6 +1,41 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
+    <div class="card mb-3">
+        <div class="card-header">
+            <ul id="tabs" class="nav nav-tabs float-sm" role="tablist">
+                <li class="btn">Your Categories</li>
+                <li>
+                <a class="btn float-sm-right" data-toggle="modal" data-target="#myModal">
+                    Add new category
+                </a>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            {% for cat in categories %}
+                    <div class="card-body">
+                        <div class="col-xl-12 col-sm-6 mb-3">
+                            <div class="card o-hidden h-100">
+                                <a class="card-header clearfix small z-1" onclick="toggle('cat_{{ cat.id }}')">
+                                    <span class="float-left" onclick="toggle('cat_{{ cat.id }}')">
+                                        {{ cat.title }}</span>
+                                </a>
+                                <ul id="cat_{{ cat.id }}" style="display: none">
+                                    {% for c in cat.category_set.all %}
+                                    <li>{{ c.title }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="card-footer small text-muted"></div>
+    </div>
+
     <div class="card mb-3">
         <div class="card-header">
 
@@ -28,7 +63,8 @@
                                     <span class="float-right">{{ tasks|length }} tasks</span>
                                 </a>
                                 <div class="table-responsive">
-                                    <table class="table table-bordered" id="{{ cat }}" width="100%" cellspacing="0" style="display: none">
+                                    <table class="table table-bordered" id="{{ cat }}" width="100%" cellspacing="0"
+                                           style="display: none">
                                         <thead>
                                         <tr>
                                             <th>Category</th>
@@ -47,22 +83,26 @@
                                         </thead>
                                         <tbody>
                                         {% for task in tasks %}
-                                            <tr>
-                                                <td>{{ task.category.title }}</td>
-                                                <td>{{ task.title }}</td>
-                                                <td>{{ task.goal.title }}</td>
-                                                <td>{{ task.get_status_display }}</td>
-                                                <td>{{ task.get_significance_display }}</td>
-                                                <td>{{ task.deadline|date:'d-m-Y' }}</td>
-                                                <td>
-                                                    <a href="{% url 'edit_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
-                                                            class="fas fa-edit"></i></a>
-                                                    <a href="{% url 'done_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
-                                                            class="fas fa-check"></i></a>
-                                                    <a href="{% url 'cancel_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
-                                                            class="fas fa-trash"></i></a>
-                                                </td>
-                                            </tr>
+                                            <a href="{% url 'edit_task' task_id=task.id %}?next={{ request.path|urlencode }}">
+                                                <tr>
+                                                    <td>{{ task.category.title }}</td>
+                                                    <td>
+                                                        <a href="{% url 'edit_task' task_id=task.id %}?next={{ request.path|urlencode }}">
+                                                            {{ task.title }}</a></td>
+                                                    <td>{{ task.goal.title }}</td>
+                                                    <td>{{ task.get_status_display }}</td>
+                                                    <td>{{ task.get_significance_display }}</td>
+                                                    <td>{{ task.deadline|date:'d-m-Y' }}</td>
+                                                    <td>
+                                                        <a href="{% url 'edit_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
+                                                                class="fas fa-edit"></i></a>
+                                                        <a href="{% url 'done_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
+                                                                class="fas fa-check"></i></a>
+                                                        <a href="{% url 'cancel_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
+                                                                class="fas fa-trash"></i></a>
+                                                    </td>
+                                                </tr>
+                                            </a>
                                         {% endfor %}
                                         </tbody>
                                     </table>
@@ -82,7 +122,8 @@
                                     <span class="float-right">{{ tasks|length }} tasks</span>
                                 </a>
                                 <div class="table-responsive">
-                                    <table class="table table-bordered" id="closed_{{ cat }}" width="100%" cellspacing="0" style="display: none">
+                                    <table class="table table-bordered" id="closed_{{ cat }}" width="100%"
+                                           cellspacing="0" style="display: none">
                                         <thead>
                                         <tr>
                                             <th>Category</th>
@@ -123,5 +164,34 @@
         </div>
 
         <div class="card-footer small text-muted"></div>
+    </div>
+
+    <!-- The Modal -->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Add new category for the tasks</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="{% url 'create_category' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        <div class="form-group">
+                            {{ category_form.title|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ category_form.parent|as_crispy_field }}
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Create category</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
