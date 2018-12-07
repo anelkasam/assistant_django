@@ -31,6 +31,7 @@
                                     <table class="table table-bordered" id="{{ cat }}" width="100%" cellspacing="0" style="display: none">
                                         <thead>
                                         <tr>
+                                            <th>Category</th>
                                             <th>Task</th>
                                             <th>Goal</th>
                                             <th>Status<a href="{% url 'tasks' %}?sort=status"><i
@@ -47,6 +48,7 @@
                                         <tbody>
                                         {% for task in tasks %}
                                             <tr>
+                                                <td>{{ task.category.title }}</td>
                                                 <td>{{ task.title }}</td>
                                                 <td>{{ task.goal.title }}</td>
                                                 <td>{{ task.get_status_display }}</td>
@@ -83,6 +85,7 @@
                                     <table class="table table-bordered" id="closed_{{ cat }}" width="100%" cellspacing="0" style="display: none">
                                         <thead>
                                         <tr>
+                                            <th>Category</th>
                                             <th>Task</th>
                                             <th>Status<a href="{% url 'tasks' %}?sort=status"><i
                                                     class="fas fa-sort-down fa-fw"></i></a>
@@ -98,6 +101,7 @@
                                         <tbody>
                                         {% for task in tasks %}
                                             <tr>
+                                                <td>{{ task.category.title }}</td>
                                                 <td>{{ task.title }}</td>
                                                 <td>{{ task.get_status_display }}</td>
                                                 <td>{{ task.get_significance_display }}</td>

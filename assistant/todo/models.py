@@ -14,6 +14,7 @@ class Category(models.Model):
     Category for the tasks
     """
     title = models.CharField('Category title', max_length=40)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True,
                              on_delete=models.CASCADE, verbose_name='Own to user')
 
@@ -21,6 +22,9 @@ class Category(models.Model):
         unique_together = (("title", "user"),)
 
     def delete(self, *args, **kwargs):
+        """
+        Deprecate deletion of the Default category
+        """
         if self.id == DEFAULT_CATEGORY:
             raise Exception('You cannot delete this Category')
         super(Category, self).delete(*args, **kwargs)
@@ -78,6 +82,18 @@ class Task(models.Model):
     def delete(self, *args, **kwargs):
         self.status = self.CANCELED
         self.save()
+
+    def get_main_category(self):
+        """
+        Returns the main category for the task
+        """
+        if not self.category.parent:
+            return self.category
+
+        cat = self.category.parent
+        while cat.parent:
+            cat = cat.parent
+        return cat
 
     def __str__(self):
         return f'{self.title} ({self.category}). Due to {self.deadline}'

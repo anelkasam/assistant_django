@@ -84,10 +84,12 @@
                 <div class="modal-body">
                     <form action="{% url 'create_category' %}" method="post">
                         {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
                         <div class="form-group">
-                            <div class="form-label-group">
-                                <input class="form-control" name="title">
-                            </div>
+                            {{ category_form.title|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ category_form.parent|as_crispy_field }}
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">Create category</button>
                     </form>

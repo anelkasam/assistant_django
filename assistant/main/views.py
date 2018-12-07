@@ -18,9 +18,10 @@ def index(request):
             'goals_number': goals.count()
         }
         tasks = tasks.filter(Q(deadline__date__lte=date.today()) | Q(deadline=None))
-        categories = {cat: [] for cat in set(t.category.title for t in tasks)}
-        for task in tasks:
-            categories[task.category.title].append(task)
-        context['categories'] = categories
+        cats = {}
+        for t in tasks:
+            cat = t.get_main_category().title
+            cats[cat] = cats.get(cat, []) + [t]
+        context['categories'] = cats
 
     return render(request, 'index.html', context)

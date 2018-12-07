@@ -91,6 +91,7 @@
                                     <table class="table table-bordered" id="{{ cat }}" width="100%" cellspacing="0" style="display: none">
                                         <thead>
                                         <tr>
+                                            <th>Category</th>
                                             <th>Task</th>
                                             <th>Goal</th>
                                             <th>Status</th>
@@ -102,6 +103,7 @@
                                         <tbody>
                                         {% for task in tasks %}
                                             <tr>
+                                                <td>{{ task.category.title }}</td>
                                                 <td>{{ task.title }}</td>
                                                 <td>{{ task.goal.title }}</td>
                                                 <td>{{ task.get_status_display }}</td>

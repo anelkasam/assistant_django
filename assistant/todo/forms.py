@@ -9,7 +9,11 @@ from goals.models import Goal
 class CreateCategoryForm(forms.ModelForm):
     class Meta:
         model = Category
-        fields = ['title']
+        fields = ['title', 'parent']
+
+    def __init__(self, user, *args, **kwargs):
+        super(CreateCategoryForm, self).__init__(*args, **kwargs)
+        self.fields['parent'].queryset = Category.objects.filter(Q(user=user) | Q(user=None))
 
 
 class DateInput(forms.DateInput):
