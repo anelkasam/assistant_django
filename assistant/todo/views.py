@@ -104,7 +104,7 @@ def edit_task(request, task_id):
         file_form = FileForm(request.POST, request.FILES, prefix='file')
         if task_form.is_valid():
             task_form.save()
-            return redirect(reverse('tasks'))
+            return redirect(request.POST.get('next', reverse('tasks')))
     else:
         task_form = TaskForm(request.user, instance=task, prefix='task')
         file_form = FileForm(request.POST, request.FILES, prefix='file')
