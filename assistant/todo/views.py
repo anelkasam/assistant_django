@@ -84,6 +84,18 @@ def create_category(request):
     return HttpResponseNotAllowed(['POST'])
 
 
+def edit_category(request, cat_id):
+    category = Category.objects.get(pk=cat_id)
+    if request.method == 'POST':
+        category_form = CreateCategoryForm(request.user, request.POST,
+                                           instance=category, prefix='category')
+        if category_form.is_valid():
+            category_form.save()
+            messages.success(request, f'Category {category} was updated.')
+        return HttpResponseRedirect(request.POST.get('next', '/'))
+    return HttpResponseNotAllowed(['POST'])
+
+
 def edit_task(request, task_id):
     task = Task.objects.get(pk=task_id)
     if request.method == 'POST':

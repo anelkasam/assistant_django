@@ -7,28 +7,23 @@
             <ul id="tabs" class="nav nav-tabs float-sm" role="tablist">
                 <li class="btn">Your Categories</li>
                 <li>
-                <a class="btn float-sm-right" data-toggle="modal" data-target="#myModal">
-                    Add new category
-                </a>
+                    <a class="btn float-sm-right" data-toggle="modal" data-target="#addCategory">
+                        Add new category
+                    </a>
                 </li>
             </ul>
         </div>
         <div class="row">
             {% for cat in categories %}
-                    <div class="card-body">
-                        <div class="col-xl-12 col-sm-6 mb-3">
-                            <div class="card o-hidden h-100">
-                                <a class="card-header clearfix small z-1" onclick="toggle('cat_{{ cat.id }}')">
-                                    <span class="float-left" onclick="toggle('cat_{{ cat.id }}')">
+                <div class="card-body">
+                    <div class="col-xl-12 col-sm-6 mb-3">
+                        <div class="card o-hidden h-100">
+                            <a class="card-header clearfix small z-1" onclick="toggle('cat_{{ cat.id }}')">
+                                    <span class="float-left">
                                         {{ cat.title }}</span>
-                                </a>
-                                <ul id="cat_{{ cat.id }}" style="display: none">
-                                    {% for c in cat.category_set.all %}
-                                    <li>{{ c.title }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
+                            </a>
                         </div>
+                    </div>
                 </div>
             {% endfor %}
         </div>
@@ -167,7 +162,7 @@
     </div>
 
     <!-- The Modal -->
-    <div class="modal" id="myModal">
+    <div class="modal" id="addCategory">
         <div class="modal-dialog">
             <div class="modal-content">
 
