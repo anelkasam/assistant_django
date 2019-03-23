@@ -1,6 +1,8 @@
 from .settings import *
 
 
+ALLOWED_HOSTS = ['0.0.0.0']
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '!c7pu9ym3w094pj$^xhm4afcj5o@q!0hu9!sr@5hh_we@h(qqo'
