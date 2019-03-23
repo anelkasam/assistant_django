@@ -1,7 +1,7 @@
 from .settings import *
 
 
-ALLOWED_HOSTS = ['0.0.0.0']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost']
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
