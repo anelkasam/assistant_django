@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_todo.html' %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 
@@ -17,6 +17,9 @@
                         {{ task_form.title|as_crispy_field }}
                     </div>
                     <div class="form-group">
+                        <a href="#" class="float-sm-right" data-toggle="modal"data-target="#addCategory">
+                            Add new category
+                        </a>
                         {{ task_form.category|as_crispy_field }}
                     </div>
                     <div class="form-group">

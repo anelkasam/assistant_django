@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% block main %}
     <div class="container">
         <div class="row">
             {% for goal in goals %}
@@ -8,6 +8,7 @@
                 <div class="circle">
                     <a href="{% url 'goal_detail' goal.pk %}">{{ goal.title }}</a>
                 </div>
+             <p>{{ goal.description }}</p>
             </div>
             {% endfor %}
         </div>
