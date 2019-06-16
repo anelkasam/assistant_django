@@ -113,9 +113,8 @@
 {#            </a>#}
 {#        </li>#}
         {% if user.is_authenticated %}
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'tasks' %}">
                     <i class="fas fa-fw fa-tasks"></i>
                     <span>Tasks</span>
                 </a>
@@ -147,7 +146,7 @@
                 {% get_bootstrap_alert_msg_css_name message.tags as alert_tag %}
                 <div class="alert alert-{{ alert_tag }}">{{ message }}</div>
             {% endfor %}
-            {% block content %} {% endblock %}
+            {% block main %} {% endblock %}
         </div>
 
         <!-- Sticky Footer -->

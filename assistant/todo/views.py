@@ -9,12 +9,19 @@ from .models import Category, Task, DEFAULT_CATEGORY
 
 
 def pack_tasks_by_category(user, tasks):
+    """
+    Return all tasks for the user with Parent Category ordering by category
+
+    :param user: authenticated user
+    :param tasks: list of all tasks for the given user
+    :return: [(main category, [task1, task2, ...])]
+    """
     cats = {cat.id: (cat, []) for cat in Category.objects.filter(user=user, parent=None)}
     cats[DEFAULT_CATEGORY] = (Category.objects.get(pk=DEFAULT_CATEGORY), [])
     for t in tasks:
         cat = t.get_main_category()
         cats[cat.id][1].append(t)
-    return cats.values()
+    return sorted(cats.values(), key=lambda x: x[0].title)
 
 
 class TaskList(ListView):
@@ -25,6 +32,12 @@ class TaskList(ListView):
         return Task.objects.filter(user=self.request.user)
 
     def get_context_data(self, *args, **kwargs):
+        """
+        Add to the context nex information:
+            category form
+            active_tasks: [(main category, [task1, task2, ...])]
+            finished_tasks: [(main category, [task1, task2, ...])]
+        """
         context = super(TaskList, self).get_context_data(*args, **kwargs)
 
         context['category_form'] = CreateCategoryForm(self.request.user, prefix='category')
@@ -33,7 +46,7 @@ class TaskList(ListView):
         category_id = self.kwargs.get('category_id')
         if category_id:
             category = get_object_or_404(Category, id=category_id)
-            tasks = tasks.filter(category=category)
+            tasks = tasks.filter(category__in=category.get_all_children())
 
         tasks = tasks.order_by(self.request.GET.get('sort', 'category'))
         active_tasks = tasks.filter(status__in=[Task.NEW, Task.PROGRESS, Task.POSTPONE])
@@ -42,31 +55,6 @@ class TaskList(ListView):
         context['finished_tasks'] = pack_tasks_by_category(self.request.user, finished_tasks)
 
         return context
-
-
-def create_task(request):
-    """
-    Create task view
-    """
-    if request.method == 'POST':
-        task_form = TaskForm(request.user, request.POST, prefix='task')
-        file_form = FileForm(request.POST, request.FILES, prefix='file')
-        if task_form.is_valid():
-            task = task_form.save(commit=False)
-            task.user = request.user
-            task.save()
-            if request.FILES and file_form.is_valid():
-                f = file_form.save(commit=False)
-                f.content_object = task
-                f.save()
-            return redirect(request.POST.get('next', 'tasks'))
-    else:
-        task_form = TaskForm(request.user, prefix='task')
-        file_form = FileForm(prefix='file')
-
-    context = {'task_form': task_form,
-               'file_form': file_form}
-    return render(request, 'add_task.html', context)
 
 
 def create_category(request):
@@ -97,7 +85,39 @@ def edit_category(request, cat_id):
                                                   'category': category})
 
 
+def create_task(request):
+    """
+    Create task view
+    Category form created on base level -> should be passed to all templates where we can create category
+    """
+    category_form = CreateCategoryForm(request.user, prefix='category')
+    if request.method == 'POST':
+        task_form = TaskForm(request.user, request.POST, prefix='task')
+        file_form = FileForm(request.POST, request.FILES, prefix='file')
+        if task_form.is_valid():
+            task = task_form.save(commit=False)
+            task.user = request.user
+            task.save()
+            if request.FILES and file_form.is_valid():
+                f = file_form.save(commit=False)
+                f.content_object = task
+                f.save()
+            return redirect(request.POST.get('next', 'tasks'))
+    else:
+        task_form = TaskForm(request.user, prefix='task')
+        file_form = FileForm(prefix='file')
+
+    context = {'task_form': task_form,
+               'file_form': file_form,
+               'category_form': category_form}
+    return render(request, 'add_task.html', context)
+
+
 def edit_task(request, task_id):
+    """
+    Edit task view
+    """
+    category_form = CreateCategoryForm(request.user, prefix='category')
     task = Task.objects.get(pk=task_id)
     if request.method == 'POST':
         task_form = TaskForm(request.user, request.POST, instance=task, prefix='task')
@@ -111,6 +131,7 @@ def edit_task(request, task_id):
 
     return render(request, 'edit_task.html', {'task_form': task_form,
                                               'file_form': file_form,
+                                              'category_form': category_form,
                                               'task': task})
 
 

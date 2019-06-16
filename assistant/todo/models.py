@@ -29,6 +29,42 @@ class Category(models.Model):
             raise Exception('You cannot delete this Category')
         super(Category, self).delete(*args, **kwargs)
 
+    @property
+    def get_category_tree(self):
+        """
+        Return string representation of this category with all its parents
+        'parent/sub1/sub2/self'
+        """
+        cat = self
+        cats = [cat.title]
+        while cat.parent is not None:
+            cat = cat.parent
+            cats.insert(0, cat.title)
+
+        return '/'.join(cats)
+
+    @property
+    def is_leaf(self):
+        """
+        Returns True if category don't have children, False otherwise
+        """
+        return self.category_set.all().count() == 0
+
+    def get_all_children(self):
+        """Returns all child categories"""
+        children = [self]
+        nodes = [self]
+        while nodes:
+            node = nodes.pop()
+            cats = list(node.category_set.all())
+            children = children + cats
+            for cat in cats:
+                if cat.is_leaf:
+                    continue
+                nodes.append(cat)
+
+        return children
+
     def __str__(self):
         return self.title
 

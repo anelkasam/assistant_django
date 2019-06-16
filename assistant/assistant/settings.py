@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'budget',
     'main',
     'todo',
-    'goals'
+    'goals',
+    'notes',
 ]
 
 MIDDLEWARE = [

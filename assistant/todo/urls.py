@@ -7,7 +7,7 @@ from . import views
 
 urlpatterns = [
     path('tasks/', views.TaskList.as_view(), name='tasks'),
-    path('category/<int:category_id>/', views.TaskList.as_view(), name='tasks_by_category'),
+    path('tasks/<int:category_id>/', views.TaskList.as_view(), name='tasks_by_category'),
     path('task/add/', views.create_task, name='add_task'),
     path('category/add/', views.create_category, name='create_category'),
     path('edit/category/<int:cat_id>/', views.edit_category, name='edit_category'),

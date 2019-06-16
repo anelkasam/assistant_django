@@ -29,5 +29,5 @@ def get_user_categories(user=None):
     """
     Return list of categories for the User. Just default categories if not user
     """
-    return {'cats': Category.objects.filter(user=user, parent=None) if user.is_authenticated else [],
+    return {'cats': sorted(Category.objects.filter(user=user), key=lambda x: x.get_category_tree),
             'default': Category.objects.filter(user=None)}
