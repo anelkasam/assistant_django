@@ -8,3 +8,4 @@ pyjwt
 coverage
 django-crispy-forms
 django-decorator-include
+django-ckeditor==5.7.1

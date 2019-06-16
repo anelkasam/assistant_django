@@ -35,10 +35,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'coverage',
-    'crispy_forms',
+    'coverage', # test tool with coverage analytic
+    'crispy_forms', # plagin for the fancy forms
     'widget_tweaks',
     'auth_extension',
+    'ckeditor', # fancy text editor
     'budget',
     'main',
     'todo',
