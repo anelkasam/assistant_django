@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <div class="container">
+        <div class="card mx-sm-5 mt-5">
+            <div class="card-header">
+                {{ category.title }}
+                <a class="float-sm-right" href="{% url 'tasks' %}">Cancel</a>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'edit_category' cat_id=category.id %}" method="post" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ category_form.title|as_crispy_field }}
+                    </div>
+                    <div class="form-group">
+                        {{ category_form.parent|as_crispy_field }}
+                    </div>
+                    <div class="form-group">
+                        Subcategories:
+                        <ul>
+                            {% for cat in category.category_set.all %}
+                                <li><a href="{% url 'edit_category' cat_id=cat.id %}">{{ cat.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Update task</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

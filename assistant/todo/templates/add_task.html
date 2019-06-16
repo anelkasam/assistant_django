@@ -1,0 +1,64 @@
+{% extends 'base_todo.html' %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <div class="container">
+        <div class="card mx-sm-5 mt-5">
+            <div class="card-header">
+                Add new task
+                <a class="float-sm-right" href="{% url 'tasks' %}">Cancel</a>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'add_task' %}" method="post" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.GET.next }}">
+                    <div class="form-group">
+                        {{ task_form.title|as_crispy_field }}
+                    </div>
+                    <div class="form-group">
+                        <a href="#" class="float-sm-right" data-toggle="modal"data-target="#addCategory">
+                            Add new category
+                        </a>
+                        {{ task_form.category|as_crispy_field }}
+                    </div>
+                    <div class="form-group">
+                        {{ task_form.goal|as_crispy_field }}
+                    </div>
+                    <div class="form-group">
+                        {{ task_form.description|as_crispy_field }}
+                    </div>
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div class="col-md-4">
+                                {{ task_form.significance|as_crispy_field }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ task_form.status|as_crispy_field }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ task_form.deadline|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{ file_form.title|as_crispy_field }}
+                    </div>
+                    <div class="form-group">
+                        <div style="position:relative;">
+                            <a class='btn btn-primary' href='javascript:;'>
+                                Choose File...
+                                <input type="file"
+                                       style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;'
+                                       name="file_source" size="40"
+                                       onchange='$("#upload-file-info").html($(this).val());'>
+                            </a>
+                            &nbsp;
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Create task</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block main %}
+    {% block content %} {% endblock %}
+
+    <!-- The Modal Add Category-->
+    <div class="modal" id="addCategory">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Add new category for the tasks</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form action="{% url 'create_category' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        <div class="form-group">
+                            {{ category_form.title|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ category_form.parent|as_crispy_field }}
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Create category</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

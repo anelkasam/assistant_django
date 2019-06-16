@@ -1,0 +1,21 @@
+/*--CSS--*/
+ .block {
+    text-align: center;
+    vertical-align: middle;
+}
+.circle {
+    background: url("images/goal.jpeg") no-repeat;
+    background-size: cover;
+    border-radius: 300px;
+    color: white;
+    height: 300px;
+    font-weight: bold;
+    width: 300px;
+    display: table;
+    margin: 20px auto;
+}
+.circle a {
+    vertical-align: middle;
+    display: table-cell;
+    color: white;
+}

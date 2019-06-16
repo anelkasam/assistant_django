@@ -1,0 +1,148 @@
+{% extends 'base_todo.html' %}
+{% load main_extras %}
+
+{% block content %}
+    <div class="card mb-3">
+        <div class="card-header">
+
+            <ul id="tabs" class="nav nav-tabs float-sm" role="tablist">
+                <i class="fas fa-tasks float-sm"></i>
+                <li class="btn">Your tasks</li>
+                <li role="presentation" class="btn dropdown">
+                    <a class="dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <span>Filter by Category</span>
+                    </a>
+
+                    {% get_user_categories user %}
+
+                </li>
+                <li role="presentation" class="btn active">
+                    <a href="#actual" role="tab" class="float-sm-right" data-toggle="tab">Actual</a>
+                </li>
+                <li role="presentation" class="btn">
+                    <a href="#closed" role="tab" class="float-sm-right" data-toggle="tab">Closed</a>
+                </li>
+                <li role="presentation" class="btn">
+                    <a href="#" class="float-sm-right" data-toggle="modal"data-target="#addCategory">
+                        Add new category
+                    </a>
+                </li>
+                <li role="presentation" class="btn">
+                    <a href="{% url 'add_task' %}?next={{ request.path|urlencode }}" class="float-sm-right">
+                        Add new task
+                    </a>
+                </li>
+                <li role="presentation" class="btn">
+                     <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search by task"  id="searchInput"  onkeyup="filter_by()">
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active in" id="actual">
+                <div class="card-body">
+                    <table class="table table-bordered" id="tasks" width="100%"
+                           cellspacing="0" style="display: table; font-size: small; table-layout: fixed">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Task</th>
+                                <th>Goal</th>
+                                <th>
+                                    Status<a href="{% url 'tasks' %}?sort=status"><i class="fas fa-sort-down fa-fw"></i></a>
+                                </th>
+                                <th>
+                                    Significance<a href="{% url 'tasks' %}?sort=significance"><i class="fas fa-sort-down fa-fw"></i></a>
+                                </th>
+                                <th>
+                                    Deadline<a href="{% url 'tasks' %}?sort=deadline"><i class="fas fa-sort-down fa-fw"></i></a>
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for cat, tasks in active_tasks %}
+                            {% for task in tasks %}
+                                <a href="{% url 'edit_task' task_id=task.id %}?next={{ request.path|urlencode }}">
+                                    <tr>
+                                        <td>{{ task.category.get_category_tree }}</td>
+                                        <td>
+                                            <a href="{% url 'edit_task' task_id=task.id %}?next={{ request.path|urlencode }}">
+                                                {{ task.title }}</a></td>
+                                        <td>{{ task.goal.title }}</td>
+                                        <td>{{ task.get_status_display }}</td>
+                                        <td>{{ task.get_significance_display }}</td>
+                                        <td>{{ task.deadline|date:'d-m-Y' }}</td>
+                                        <td>
+                                            <a href="{% url 'edit_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
+                                                    class="fas fa-edit"></i></a>
+                                            <a href="{% url 'done_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
+                                                    class="fas fa-check"></i></a>
+                                            <a href="{% url 'cancel_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
+                                                    class="fas fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                </a>
+                            {% endfor %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="closed">
+                <div class="card-body">
+                    {% for cat, tasks in finished_tasks %}
+                        <div class="col-xl-12 col-sm-6 mb-3">
+                            <div class="card o-hidden h-100">
+                                <a class="card-header clearfix small z-1" onclick="toggle('closed_{{ cat.id }}')">
+                                    <span class="float-left">{{ cat.title }}</span>
+                                    <span class="float-right">{{ tasks|length }} tasks</span>
+                                </a>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="closed_{{ cat.id }}" width="100%"
+                                           cellspacing="0" style="display: none">
+                                        <thead>
+                                        <tr>
+                                            <th>Category</th>
+                                            <th>Task</th>
+                                            <th>Status<a href="{% url 'tasks' %}?sort=status"><i
+                                                    class="fas fa-sort-down fa-fw"></i></a>
+                                            </th>
+                                            <th>Significance<a href="{% url 'tasks' %}?sort=significance"><i
+                                                    class="fas fa-sort-down fa-fw"></i></a></th>
+                                            <th>Deadline<a href="{% url 'tasks' %}?sort=deadline"><i
+                                                    class="fas fa-sort-down fa-fw"></i></a>
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for task in tasks %}
+                                            <tr>
+                                                <td>{{ task.category.title }}</td>
+                                                <td>{{ task.title }}</td>
+                                                <td>{{ task.get_status_display }}</td>
+                                                <td>{{ task.get_significance_display }}</td>
+                                                <td>{{ task.deadline|date:'d-m-Y' }}</td>
+                                                <td>
+                                                    <a href="{% url 'edit_task' task_id=task.id %}?next={{ request.path|urlencode }}"><i
+                                                            class="fas fa-edit"></i></a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer small text-muted"></div>
+    </div>
+{% endblock %}

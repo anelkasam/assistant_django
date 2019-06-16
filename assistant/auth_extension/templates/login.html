@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container">
+    <div class="card card-login mx-auto mt-5">
+        <div class="card-header">Login</div>
+        <div class="card-body">
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                {% for error in form.errors.values %}
+                    <div class="alert-warning">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+                <div class="form-group">
+                    <div class="form-label-group">
+                        {{ form.username|add_class:'form-control' }}
+                        <label for="{{ form.username.id_for_label }}">Email address</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-label-group">
+                        {{ form.password|add_class:'form-control' }}
+                        <label for="{{ form.password.id_for_label }}">Password</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="remember-me">
+                            Remember Password
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+            <div class="text-center">
+                <a class="d-block small mt-3" href="{% url 'register' %}">Register an Account</a>
+                <a class="d-block small" href="{% url 'password_reset' %}">Forgot Password?</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
