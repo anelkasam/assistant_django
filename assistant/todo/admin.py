@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Category, Files, Task, DEFAULT_CATEGORY
+from todo.models import Category, Files, Task, DEFAULT_CATEGORY
+from notes.admin import NoteInline, LinkInline
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -12,6 +13,13 @@ class CategoryAdmin(admin.ModelAdmin):
             super(CategoryAdmin, self).get_actions(request)
 
 
+class TaskAdmin(admin.ModelAdmin):
+    inlines = [
+        NoteInline,
+        LinkInline,
+    ]
+
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Files)
-admin.site.register(Task)
+admin.site.register(Task, TaskAdmin)

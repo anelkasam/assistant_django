@@ -1,5 +1,14 @@
 from django.contrib import admin
-from .models import Goal
+
+from goals.models import Goal
+from notes.admin import NoteInline, LinkInline
 
 
-admin.site.register(Goal)
+class GoalAdmin(admin.ModelAdmin):
+    inlines = [
+        NoteInline,
+        LinkInline,
+    ]
+
+
+admin.site.register(Goal, GoalAdmin)
